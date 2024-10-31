@@ -1,50 +1,95 @@
-```markdown
-# Szentiras_export
+# 📖 Szentiras_export ✨
 
-Ez a Python script bibliai verseket tölt le a szentiras.hu API-ról, és elmenti azokat egy szöveges fájlba. A lekérdezendő versek hivatkozásait a `references.json` fájl tartalmazza.
+Ez a Python script bibliai verseket tölt le a szentiras.hu API-ról, és szépen formázva elmenti azokat egy szöveges fájlba.  A lekérdezendő versek hivatkozásait a `references.json` fájl tartalmazza.
 
-## Használat
 
-1.  Telepítse a szükséges függőségeket:
+## 🚀 Használat
 
-```bash
-pip install requests
+1. **Függőségek telepítése:**
+
+    ```bash
+    pip install requests
+    ```
+
+2. **Hivatkozások előkészítése:**
+
+    Hozzon létre egy `references.json` fájlt a projekt gyökerében, és töltse fel a lekérdezni kívánt bibliai hivatkozásokkal.  A fájl formátuma a következő:
+
+    ```json
+    [
+      "1Jn3,18",
+      "1Jn4,7",
+      "1Jn4,18",
+      "1Jn4,19",
+      "1Jn4,20"
+      // ...
+    ]
+    ```
+
+3. **Script futtatása:**
+
+    ```bash
+    python szentiras_export.py
+    ```
+
+    🎉 A script létrehoz egy `verse_export.txt` fájlt, amely tartalmazza a lekérdezett verseket, azok hivatkozásait és a fordítás nevét.
+
+
+
+## ⚙️ Fordítás módosítása
+
+A script alapértelmezésben a SZIT fordítást használja.  Ha másik fordítást szeretnél használni, módosítsd a `get_verse` függvényben a `translation` paraméter értékét:
+
+```python
+def get_verse(reference, translation='SZIT'): #  <- Itt módosíthatod a fordítást
+    url = f"https://szentiras.hu/api/idezet/{reference}/{translation}"
+    # ...
 ```
 
-2.  Hozzon létre egy `references.json` fájlt a projekt gyökerében, és töltse fel a lekérdezni kívánt bibliai hivatkozásokkal. A fájl formátuma a következő:
+Valamint a `export_all_verses` függvényben a `get_verse` hívásánál is:
 
-```json
-[
-  "1Jn3,18",
-  "1Jn4,7",
-  "1Jn4,18",
-  "1Jn4,19",
-  "1Jn4,20"
-  // ...
-]
+```python
+def export_all_verses():
+    #...
+    verse = get_verse(reference, translation="KG") # <- és itt is
+    #...
 ```
 
-3. Futtassa a `szentiras_export.py` scriptet:
+Például a Károli Gáspár fordításhoz használd a `KG` rövidítést.
 
-```bash
-python szentiras_export.py
-```
+## ❗❗❗ Fontos
 
-A script létrehoz egy `verse_export.txt` fájlt, amely tartalmazza a lekérdezett verseket, azok hivatkozásait és a fordítás nevét.
+Mivel a program a konkrét szentírási részt nyeri ki a szentiras.hu-ból, ezért vesszőhibák, idézőjelhibák és félbehagyott mondatok keletkezhetnek:
 
-## Hibakezelés
+Például: Józsue könyve: [Józsue könyve: 1. fejezet](https://szentiras.hu/SZIT/J%C3%B3zs1) ➡️ [9-es rész](https://szentiras.hu/SZIT/J%C3%B3zs1,9)
 
-A script tartalmaz hibakezelést a következő esetekre:
+Hát nem azt a parancsot adtam neked, `9` hogy légy...
 
-*   Hiányzó `references.json` fájl.
-*   Érvénytelen JSON formátum a `references.json` fájlban.
-*   Hálózati hibák a szentiras.hu API elérésekor.
-*   Hibás formátumú válasz az API-tól.
-*   Nem található vers a megadott hivatkozásra.
+Mivel az 1. fejezet `9` része itt kezdődik, ezért így fog kinézni:
 
-A hibákról szóló üzenetek a konzolra íródnak, és a `verse_export.txt` fájlban is jelennek meg.
+_hogy légy erős és kitartó? Ne félj és ne aggódj tehát, mert az Úr, a te Istened veled lesz mindenütt, ahova csak mész.”_
+
+## 🛡️ Hibakezelés
+
+A script gondosan kezeli a lehetséges hibákat, mint például:
+
+*   `references.json` fájl hiánya 🚫
+*   Érvénytelen JSON formátum a `references.json` fájlban  ❌
+*   Hálózati hibák  🌐
+*   Hibás API válaszok ❗
+*   Nem található vers  ❓
+
+A hibákról részletes üzenetek jelennek meg a konzolon, és a `verse_export.txt` fájlban is rögzítésre kerülnek.
 
 
-## Észrevételek:
+## ✨ További fejlesztési lehetőségek
 
-*lorem ipsum
+*   **Parancssori argumentumok:**  A fordítás és a kimeneti fájl nevének megadása. 🗣️
+*   **Részletesebb naplózás:** Még több információ a script működéséről. 📝
+*   **Több fordítás támogatása:**  Egyszerre több fordítás letöltése. 🌍
+*   **Progress bar:**  A letöltés folyamatának vizualizálása. ⏳
+
+
+##  🙏  Közreműködés
+
+Szeretettel várunk minden hozzájárulást!  Küldj pull requestet, ha van ötleted a fejlesztésre! ❤️
